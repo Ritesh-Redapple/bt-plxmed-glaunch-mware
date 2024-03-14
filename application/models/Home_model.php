@@ -104,4 +104,70 @@ class Home_model extends CI_Model
         $result = $this->db2->query($query);
         return $result->row_array();
     }
+
+    public function getGameDetailsbyId($game_id, $provider_id)
+    {
+        $query = "SELECT GM.*, PM.module_name, PM.module_slug
+                FROM games AS GM
+                    LEFT JOIN providers_module AS PM
+                        ON GM.module_id = PM.id
+                    WHERE GM.id = '{$game_id}'
+                    AND GM.provider_id = '{$provider_id}'
+                    AND GM.status ='0'";
+        $this->db2->query($query);
+        $result = $this->db2->query($query);
+        return $result->row_array();
+    }
+
+    public function checkUsercodeExists($usercode)
+    {
+        $sql = "SELECT CUM.client_id, CUM.user_id, C.currency_code FROM `client_users_mapping` AS CUM 
+        INNER JOIN clients AS C ON C.id = CUM.client_id
+        WHERE CUM.usercode = '{$usercode}'";
+        $query = $this->db->query($sql);
+        if ($query->num_rows() == 1) {
+            $client_id = $query->row()->client_id;
+            $user_id = $query->row()->user_id;
+            $currency_code = $query->row()->currency_code;
+            $sql2 = "SELECT id as user_id, username, available_balance, 
+            
+            CASE
+                WHEN '" . $currency_code . "' = 'KRW'
+                    THEN 'WON'
+                ELSE '" . $currency_code . "'
+            END AS currency,
+
+            user_type, user_state, status FROM client_users_" . $client_id . " WHERE usercode = '{$usercode}'";
+            $query2 = $this->db->query($sql2);
+            $result = $query2->row_array();
+            $result['client_id'] = $client_id;
+
+            /*-----------------------------------------------*/
+            /*---NEW MODEL CODE TO GET CLIENT CALLBACK URL---*/
+            /*-----------------------------------------------*/
+            $result['is_callback_active'] = "";
+            $result['callback_url'] = "";
+            $sqlCallback = "SELECT is_active,callback_url FROM client_callback_request_details WHERE client_id =" . $client_id . "";
+            $queryCallback = $this->db->query($sqlCallback);
+            if ($queryCallback->num_rows() > 0) {
+                $resultCallback = $queryCallback->row_array();
+                $result['is_callback_active'] =  $resultCallback['is_active'];
+                $result['callback_url'] =  $resultCallback['callback_url'];
+            }
+            /*-----------------------------------------------*/
+            /*-----------------------------------------------*/
+            $result['is_maintenance_mode_on'] = "N";
+            $sql3 = "SELECT is_maintenance_mode_on FROM `clients` WHERE id='" . $client_id . "'";
+            $query3 = $this->db->query($sql3);
+            $row3 = $query3->row_array();
+
+            if ($query3->num_rows() > 0) {
+                $result['is_maintenance_mode_on'] = $row3["is_maintenance_mode_on"];
+            }
+            /* --------------------------------------------------- */
+            return $result;
+        } else {
+            return array();
+        }
+    }
 }

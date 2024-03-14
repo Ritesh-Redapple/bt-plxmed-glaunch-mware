@@ -13,7 +13,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 p-0">
-            <iframe scrolling="no" width="100%"  height="100%" noresize="noresize" src="<?php echo $launchUrl.'?'.$query?>"
+            <iframe scrolling="no" width="100%"  height="100%" noresize="noresize" src="<?php echo $launchUrl;?>"
                 id="gameFrame"><?php echo $launchUrl;?></iframe>
         </div>
     </div>

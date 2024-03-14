@@ -38,17 +38,11 @@ class Home extends MY_Controller
 	{
 		$data = array();
 		$params = $this->input->get();
-		
 		$provider_id = 17;
-		$pid = $this->input->get('pid', TRUE);
-        $gid  = $this->input->get('gid', TRUE);
-        $channel = $this->input->get('channel', TRUE);
-        $lang = $this->input->get('lang', TRUE);
-        $practice = $this->input->get('practice', TRUE);
+		$gid  = $this->input->get('gid', TRUE);
         $ticket  = $this->input->get('ticket', TRUE);
         $brand = $this->input->get('brand', TRUE);
-        $origin = $this->input->get('origin', TRUE);
-		$client_id = explode('-',$brand)[1];
+        $client_id = explode('-',$brand)[1];
 
 
 		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$ticket,$provider_id,$client_id);
@@ -105,6 +99,110 @@ class Home extends MY_Controller
 		
 		
 		$this->commonLayoutView('pnglaunch', $data, true);
+	}
+
+	public function pgsoftlaunch()
+	{
+		$data = array();
+		$params = $this->input->get();
+		
+		$provider_id =  $this->input->get('pv', TRUE);
+		$player_token  = $this->input->get('token', TRUE);
+		$gid  = $this->input->get('game', TRUE);
+		$client_id = $this->input->get('client_id', TRUE);
+		$language = !empty($this->input->get('lang', TRUE))?$this->input->get('lang', TRUE):'en';
+
+
+		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$player_token,$provider_id,$client_id);
+		if(empty($chkuser_details))
+		{
+			$resultarr = json_encode([
+				"status" => "error",
+				"error"=> [
+				  "scope"=> "user",
+				  "no_refund"=>"1",
+				  "message"=> "Token mismatched!"
+				]
+			]);
+			return $resultarr;
+		}
+
+		$gamedetail = $this->Home_model->getGameDetailsbyId($gid, $provider_id);
+		if(empty($gamedetail))
+		{
+			$resultarr = json_encode([
+				"status" => "error",
+				"code"=> "1007",
+				"message"=>"Game not found!"
+			]);
+
+			return $resultarr;
+		}
+		$provider_params = $this->Home_model->get_provider_params($client_id, $provider_id);
+		$pparam = array();
+		if (!empty($provider_params)) 
+		{
+			foreach ($provider_params as $provider_params) 
+			{
+				$pparam[$provider_params['field_key']] = $provider_params['field_value'];
+			}
+
+			$secret_key = $pparam['secret_key'];
+			$operator_token = $pparam['operator_token'];
+			$new_game_launch_url = $pparam['new_game_launch_url'];
+			$lobby_url = $pparam['lobby_url'];
+		}
+
+
+	  $user_code =  explode('-',$player_token)[1];;
+      $game_code = $gamedetail['game_code'];
+    
+      $trace_id = $this->get_uuid(openssl_random_pseudo_bytes(32));
+      $body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip='.$this->getIP(); //1408d57ed2abdaef7994c926ff558413
+      //echo $body_params_encoded; die();
+
+      $url = $new_game_launch_url."/api/v1/GetLaunchURLHTML?trace_id=".$trace_id;
+      $headers = ['Content-Type: application/x-www-form-urlencoded'];
+  
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $body_params_encoded);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      $response = curl_exec($ch);
+
+      if($response === false)
+      {
+        $result = curl_error($ch);
+      }
+      else
+      {   
+          $result = $response;
+      }
+
+      curl_close($ch);
+      echo $result;
+		
+		
+		
+		$this->commonLayoutView('pgsoftlaunch', $data, true);
+	}
+
+	private function get_uuid($data)
+	{
+
+		assert(strlen($data) == 32);
+		$data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
+		$data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
+		return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+	}
+
+	private function getIP()
+	{
+		$ip = $_SERVER['REMOTE_ADDR'] ?: ($_SERVER['HTTP_X_FORWARDED_FOR'] ?: $_SERVER['HTTP_CLIENT_IP']);
+		return $ip;
 	}
 	/* public function index()
 	{
