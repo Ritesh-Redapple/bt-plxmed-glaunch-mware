@@ -7,3 +7,6 @@ if(!empty($response) && $response['success'])
     echo $response['response'];
 } 
 ?>
+<script>
+    console.log('$response---','<?php echo $response?>');
+</script>

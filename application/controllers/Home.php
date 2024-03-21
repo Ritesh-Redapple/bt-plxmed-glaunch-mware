@@ -156,7 +156,7 @@ class Home extends MY_Controller
 			$lobby_url = $pparam['lobby_url'];
 		}
 
-		echo '<pr>';print_r($pparam); die;
+		//echo '<pr>';print_r($pparam); die;
 		
 
 	  $user_code =  explode('-',$player_token)[1];;
