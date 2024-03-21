@@ -105,6 +105,8 @@ class Home extends MY_Controller
 	{
 		$data = array();
 		$params = $this->input->get();
+
+		//echo '<pre>';print_r($params); 
 		
 		$provider_id =  $this->input->get('pv', TRUE);
 		$player_token  = $this->input->get('token', TRUE);
@@ -124,7 +126,8 @@ class Home extends MY_Controller
 				  "message"=> "Token mismatched!"
 				]
 			]);
-			return $resultarr;
+			echo $resultarr; die;
+			//;
 		}
 
 		$gamedetail = $this->Home_model->getGameDetailsbyId($gid, $provider_id);
@@ -135,8 +138,8 @@ class Home extends MY_Controller
 				"code"=> "1007",
 				"message"=>"Game not found!"
 			]);
-
-			return $resultarr;
+			echo $resultarr; die;
+			//return $resultarr;
 		}
 		$provider_params = $this->Home_model->get_provider_params($client_id, $provider_id);
 		$pparam = array();
@@ -149,10 +152,10 @@ class Home extends MY_Controller
 
 			$secret_key = $pparam['secret_key'];
 			$operator_token = $pparam['operator_token'];
-			$new_game_launch_url = $pparam['new_game_launch_url'];
+			$new_game_launch_url = $pparam['game_launch_url_new'];
 			$lobby_url = $pparam['lobby_url'];
 		}
-
+		
 
 	  $user_code =  explode('-',$player_token)[1];;
       $game_code = $gamedetail['game_code'];
@@ -161,7 +164,7 @@ class Home extends MY_Controller
       $body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip='.$this->getIP(); //1408d57ed2abdaef7994c926ff558413
       //echo $body_params_encoded; die();
 
-      $url = $new_game_launch_url."/api/v1/GetLaunchURLHTML?trace_id=".$trace_id;
+      $url = $new_game_launch_url."?trace_id=".$trace_id;
       $headers = ['Content-Type: application/x-www-form-urlencoded'];
   
       $ch = curl_init();
@@ -173,21 +176,22 @@ class Home extends MY_Controller
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       $response = curl_exec($ch);
 
-      if($response === false)
+	  $result = array(); 
+	  if($response === false)
       {
-        $result = curl_error($ch);
-      }
-      else
+        $result['success']= false;
+		$result['response'] = curl_error($ch);
+      }else
       {   
-          $result = $response;
+		$result['success']= true;
+        $result['response'] = $response;
       }
 
       curl_close($ch);
-      echo $result;
+      
+	  $data['response'] = $result;
 		
-		
-		
-		$this->commonLayoutView('pgsoftlaunch', $data, true);
+	  $this->commonLayoutView('pgsoftlaunch', $data, true);
 	}
 
 	private function get_uuid($data)
