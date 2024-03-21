@@ -56,7 +56,7 @@ class Home extends MY_Controller
 				  "message"=> "Token mismatched!"
 				]
 			]);
-			return $resultarr;
+			echo $resultarr; die;
 		}
 
 		$gamedetail = $this->Home_model->getGameDetailsbyCode($gid, $provider_id);
@@ -68,7 +68,7 @@ class Home extends MY_Controller
 				"message"=>"Game not found!"
 			]);
 
-			return $resultarr;
+			echo $resultarr; die;
 		}
 		$provider_params = $this->Home_model->get_provider_params($client_id, $provider_id);
 		$pparam = array();
@@ -81,7 +81,7 @@ class Home extends MY_Controller
 			
 			//$data['stagecheck'] = $this->staging_check;
 		}
-
+		//echo '<pre>'; print_r($pparam); die;
 		$query=""; $i=0;
 		foreach ($params as $key => $value) {
 			//echo $key.':'.$value;
@@ -94,8 +94,8 @@ class Home extends MY_Controller
 			$i++;
 		}
 
-		$data['launchUrl'] = $pparam['provider_game_launch_url']; 
-		$data['query'] = $query ; 
+		$data['launchUrl'] = $pparam['provider_game_launch_url'].'?'.$query; 
+		//$data['query'] = $query ; 
 		
 		
 		$this->commonLayoutView('pnglaunch', $data, true);
