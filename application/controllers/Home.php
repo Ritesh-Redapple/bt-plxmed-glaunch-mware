@@ -155,6 +155,8 @@ class Home extends MY_Controller
 			$new_game_launch_url = $pparam['game_launch_url_new'];
 			$lobby_url = $pparam['lobby_url'];
 		}
+
+		echo '<pr>';print_r($pparam); die;
 		
 
 	  $user_code =  explode('-',$player_token)[1];;
