@@ -168,6 +168,8 @@ class Home extends MY_Controller
 
       $url = $new_game_launch_url."?trace_id=".$trace_id;
       $headers = ['Content-Type: application/x-www-form-urlencoded'];
+
+	  echo  $url; die;
   
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
