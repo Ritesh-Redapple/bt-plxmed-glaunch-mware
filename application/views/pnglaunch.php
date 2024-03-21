@@ -9,9 +9,14 @@
 	body {
 		margin: 0 auto;
 	}
+    #iframediv {
+        min-height: 750px;
+    }
 </style>
+<div id="iframediv">
 <iframe scrolling="no" width="100%"  height="100%" noresize="noresize" src="<?php echo $launchUrl;?>"
                 id="gameFrame"><?php echo $launchUrl;?></iframe>
+</div>
 
 
 <script>
