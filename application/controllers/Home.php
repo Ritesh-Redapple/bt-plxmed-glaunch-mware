@@ -169,7 +169,7 @@ class Home extends MY_Controller
       $url = $new_game_launch_url."?trace_id=".$trace_id;
       $headers = ['Content-Type: application/x-www-form-urlencoded'];
 
-	  echo  $url; die;
+	  echo  $url; 
   
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -179,6 +179,8 @@ class Home extends MY_Controller
       curl_setopt($ch, CURLOPT_POSTFIELDS, $body_params_encoded);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       $response = curl_exec($ch);
+
+	  echo '<pre>';print_r($body_params_encoded);print_r($response); die;
 
 	  $result = array(); 
 	  if($response === false)
