@@ -180,7 +180,7 @@ class Home extends MY_Controller
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       $response = curl_exec($ch);
 
-	  echo '<pre>';print_r($body_params_encoded);print_r($response); die;
+	  echo '<pre>';print_r($body_params_encoded); die;
 
 	  $result = array(); 
 	  if($response === false)
