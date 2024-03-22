@@ -164,12 +164,12 @@ class Home extends MY_Controller
     
       $trace_id = $this->get_uuid(openssl_random_pseudo_bytes(32));
       $body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip='.$this->getIP(); //1408d57ed2abdaef7994c926ff558413
-      echo $body_params_encoded; //die();
+      //echo $body_params_encoded; //die();
 
       $url = $new_game_launch_url."?trace_id=".$trace_id;
       $headers = ['Content-Type: application/x-www-form-urlencoded'];
 
-	  echo  $url; die;
+	  //echo  $url; die;
   
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
