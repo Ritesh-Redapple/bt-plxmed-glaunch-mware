@@ -2,7 +2,7 @@
 <style type="text/css">
 	#gameFrame {
 		width: 100%;
-	    height: 100%;
+	    height: 100vh;
 	    border: none;
 	    margin: 0 auto;
 	}
@@ -14,7 +14,7 @@
     }
 </style>
 <div id="iframediv">
-<iframe scrolling="no" width="100%"  height="100%" noresize="noresize" src="<?php echo $launchUrl;?>"
+<iframe scrolling="no" width="100%"  noresize="noresize" src="<?php echo $launchUrl;?>"
                 id="gameFrame"><?php echo $launchUrl;?></iframe>
 </div>
 
