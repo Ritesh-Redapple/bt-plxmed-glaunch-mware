@@ -23,6 +23,7 @@
 document.getElementById("gameFrame").onload = function () {
     GameCommunicator.init(document.getElementById("gameFrame"));
     GameCommunicator.postMessage({ messageType: "addEventListener", eventType: "reloadGame" });
+    GameCommunicator.postMessage({ messageType: "addEventListener", eventType: "backToLobby" });
 
 }
 /**
@@ -65,6 +66,10 @@ var GameCommunicator =
                 console.log("reload code");
                 window.location.reload(); // stub implementation
                 break;
+            case "backToLobby":
+                console.log("backToLobby");
+                window.location.reload(); // stub implementation
+            break;
             default:
                 break;
         }
