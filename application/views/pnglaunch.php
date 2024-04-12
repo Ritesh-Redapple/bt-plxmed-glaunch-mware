@@ -23,6 +23,7 @@
 document.getElementById("gameFrame").onload = function () {
     GameCommunicator.init(document.getElementById("gameFrame"));
     GameCommunicator.postMessage({ messageType: "addEventListener", eventType: "reloadGame" });
+    GameCommunicator.postMessage({ messageType: "addEventListener", eventType: "backToLobby" });
 
 }
 /**
@@ -60,13 +61,22 @@ var GameCommunicator =
     */
     processGameMessage: function (e) {
         console.log("GameCommunicator reveiced: ", e.data);
-        switch (e.data.Type) {
+        switch (e.data.eventType) {
             case "reloadGame":
                 console.log("reload code");
                 window.location.reload(); // stub implementation
-                break;
+            break;
+            case "backToLobby":
+                console.log("backToLobby");
+                if("mobile" == "desktop") {
+                    window.parent.postMessage({ type: 'rgs-backToHome', mainDomain: "https://bswb.plxmed.com/" }, '*');
+                } 
+                else {
+                    window.location.href = "https://bswb.plxmed.com/";
+                }
+            break;
             default:
-                break;
+            break;
         }
     }
 }
