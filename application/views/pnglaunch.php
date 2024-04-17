@@ -42,8 +42,8 @@ var GameCommunicator =
     init: function (element) {
         window.addEventListener("message", this.processGameMessage.bind(this));
         this.source = element.contentWindow;
-        //this.origin = "https://bsistage.playngonetwork.com";
-        this.origin = "https://bsicw.playngonetwork.com";
+        this.origin = "https://bsistage.playngonetwork.com";
+        //this.origin = "https://bsicw.playngonetwork.com";
     },
     /**
     * Sends the message to the Iframe
