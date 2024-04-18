@@ -1,84 +1,125 @@
-
 <style type="text/css">
-	#gameFrame {
-		width: 100%;
-	    height: 100vh;
-	    border: none;
-	    margin: 0 auto;
-	}
-	body {
-		margin: 0 auto;
-	}
+    #gameFrame {
+        width: 100%;
+        height: 100vh;
+        border: none;
+        margin: 0 auto;
+    }
+
+    body {
+        margin: 0 auto;
+    }
+
     #iframediv {
         min-height: 750px;
     }
 </style>
 <div id="iframediv">
-<iframe scrolling="no" width="100%"  noresize="noresize" src="<?php echo $launchUrl;?>"
-                id="gameFrame"><?php echo $launchUrl;?></iframe>
+    <iframe scrolling="no" width="100%" noresize="noresize" src="<?php echo $launchUrl; ?>" id="gameFrame"><?php echo $launchUrl; ?></iframe>
 </div>
 
 
 <script>
-document.getElementById("gameFrame").onload = function () {
-    GameCommunicator.init(document.getElementById("gameFrame"));
-    GameCommunicator.postMessage({ messageType: "addEventListener", eventType: "reloadGame" });
-    GameCommunicator.postMessage({ messageType: "addEventListener", eventType: "backToLobby" });
+    document.getElementById("gameFrame").onload = function() {
+        GameCommunicator.init(document.getElementById("gameFrame"));
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "gameReady"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "gameError"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "running"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "roundStarted"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "roundEnded"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "gameEnabled"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "gameDisabled"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "gameIdle"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "logout"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "balanceUpdate"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "roundWin"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "backToLobby"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "reloadGame"
+        });
+        GameCommunicator.postMessage({
+            messageType: "addEventListener",
+            eventType: "playForReal"
+        });
 
-}
-/**
-* GameCommuncator
-* Basic implementation of window.postmessage communication with
-Iframed PNG game.
-*/
-var GameCommunicator =
-{
-    source: undefined,
-    origin: undefined,
-    /**
-    * Initiates the communication with the Iframe
-    * @@param {iframe} element
-    */
-    init: function (element) {
-        window.addEventListener("message", this.processGameMessage.bind(this));
-        this.source = element.contentWindow;
-        this.origin = "https://bsistage.playngonetwork.com";
-        //this.origin = "https://bsicw.playngonetwork.com";
-    },
-    /**
-    * Sends the message to the Iframe
-    * @@param {object} data
-    * Example of adding an Engage event listener: GameCommunicator.postMessage({ messageType: "addEventListener", eventType: "roundStarted" })
-    * Example of calling Engage function: GameCommunicator.postMessage({ messageType: "request", eventType: "spin" })
-    */
-    postMessage: function (data) {
-        console.log("GameCommunicator sent the following message:", data);
-        this.source.postMessage(data, this.origin);
-    },
-    /**
-    * Receives the messages the PNG game dispatches
-    * @@param {object} e
-    */
-    processGameMessage: function (e) {
-        console.log("GameCommunicator reveiced: ", e.data);
-        switch (e.data.eventType) {
-            case "reloadGame":
-                console.log("reload code");
-                window.location.reload(); // stub implementation
-            break;
-            case "backToLobby":
-                console.log("backToLobby");
-                if("mobile" == "desktop") {
-                    window.parent.postMessage({ type: 'rgs-backToHome', mainDomain: "https://bswb.plxmed.com/" }, '*');
-                } 
-                else {
-                    window.location.href = "https://bswb.plxmed.com/";
-                }
-            break;
-            default:
-            break;
-        }
     }
-}
-</script>
+    /**
+    * GameCommuncator
+    * Basic implementation of window.postmessage communication with
+    Iframed PNG game.
+    */
+    var GameCommunicator = {
+        source: undefined,
+        origin: undefined,
 
+        init: function(element) {
+            window.addEventListener("message", this.processGameMessage.bind(this));
+            this.source = element.contentWindow;
+            this.origin = "https://bsistage.playngonetwork.com/"; //origin of PNG container launcher. iframe origin
+        },
+
+        postMessage: function(data) {
+            console.log("GameCommunicator sent the following message:", data);
+            this.source.postMessage(data, this.origin);
+        },
+        /**
+         * Receives the messages the PNG game dispatches
+         * @@param {object} e
+         */
+        processGameMessage: function(e) {
+            console.log("GameCommunicator received: ", e.data);
+            switch (e.data.type) {
+                case "reloadGame":
+                    window.location.reload();
+                    //You can add whatever code you want to use here.
+                    break;
+                case "backToLobby":
+                    window.location.replace("https://bswb.plxmed.com/");
+                    break;
+
+                default:
+                    break;
+            }
+
+
+        }
+
+    }
+</script>
