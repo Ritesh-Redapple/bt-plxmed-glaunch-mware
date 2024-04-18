@@ -90,9 +90,9 @@
         origin: undefined,
 
         init: function(element) {
-            window.addEventListener("message", this.processGameMessage.bind(this));
             this.source = element.contentWindow;
             this.origin = "https://bsistage.playngonetwork.com/"; //origin of PNG container launcher. iframe origin
+            window.addEventListener("message", this.processGameMessage.bind(this));
         },
 
         postMessage: function(data) {
