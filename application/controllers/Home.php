@@ -240,6 +240,7 @@ class Home extends MY_Controller
 		}
 
 		$gamedetail = $this->Home_model->getGameDetailsbyCode($game_code, $provider_id);
+
 		if(empty($gamedetail))
 		{
 			$resultarr = json_encode([
@@ -267,7 +268,7 @@ class Home extends MY_Controller
 		$partnercode = $pparam['partnerCode'];
 		$apiurl = $pparam['apiurl'];
 		$wsurl = $pparam['wsurl'];
-		if($provider_id == 65){
+		if($gamedetail["provider_id"] == 92){
 
 			if($game_code == 'lobby'){
 	  
@@ -279,7 +280,7 @@ class Home extends MY_Controller
 	  
 			}
 
-		   }else{
+		   } else{
 	  
 			$gameTokenUrl   =   "{$clienturl}/#/?apiUrl={$apiurl}&wsUrl={$wsurl}&partnerCode={$partnercode}&token={$ticket}&locale={$language}&gameId={$game_code}";
 	  
