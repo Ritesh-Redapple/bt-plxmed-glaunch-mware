@@ -239,7 +239,12 @@ class Home extends MY_Controller
 			echo $resultarr; die;
 		}
 
-		$gamedetail = $this->Home_model->getGameDetailsbyCode($game_code, $provider_id);
+		
+		$providerdetail = $this->Home_model->getproviderdetails($provider_id);
+		$parentprovider = !empty($providerdetail['parent_id'])?$providerdetail['parent_id']:$provider_id;
+
+
+		$gamedetail = $this->Home_model->getGameDetailsbyCode($game_code, $parentprovider);
 		if(empty($gamedetail))
 		{
 			$resultarr = json_encode([

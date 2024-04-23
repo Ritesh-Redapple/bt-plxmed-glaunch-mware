@@ -170,4 +170,15 @@ class Home_model extends CI_Model
             return array();
         }
     }
+
+    public function getproviderdetails($provider_id)
+    {
+        $query = "SELECT *
+                FROM providers
+                WHERE id = '{$provider_id}'";
+        $this->db2->query($query);
+        $result = $this->db2->query($query);
+        return $result->row_array();
+    }
+
 }
