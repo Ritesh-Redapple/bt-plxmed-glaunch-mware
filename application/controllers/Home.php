@@ -225,6 +225,9 @@ class Home extends MY_Controller
         $client_id = $this->input->get('cid', TRUE);
 		$language = $this->input->get('language', TRUE);
 
+		$providerdetail = $this->Home_model->getproviderdetails($provider_id);
+		$parentprovider = !empty($providerdetail['parent_id'])?$providerdetail['parent_id']:$provider_id;
+
 		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$ticket,$provider_id,$client_id);
 		if(empty($chkuser_details))
 		{
@@ -239,12 +242,8 @@ class Home extends MY_Controller
 			echo $resultarr; die;
 		}
 
-		
-		$providerdetail = $this->Home_model->getproviderdetails($provider_id);
-		$parentprovider = !empty($providerdetail['parent_id'])?$providerdetail['parent_id']:$provider_id;
-
-
 		$gamedetail = $this->Home_model->getGameDetailsbyCode($game_code, $parentprovider);
+
 		if(empty($gamedetail))
 		{
 			$resultarr = json_encode([
@@ -272,7 +271,7 @@ class Home extends MY_Controller
 		$partnercode = $pparam['partnerCode'];
 		$apiurl = $pparam['apiurl'];
 		$wsurl = $pparam['wsurl'];
-		if($provider_id == 65){
+		if($gamedetail["provider_id"] == 92){
 
 			if($game_code == 'lobby'){
 	  
@@ -284,9 +283,9 @@ class Home extends MY_Controller
 	  
 			}
 
-		   }else{
+		   } else{
 	  
-			$gameTokenUrl   =   "{$clienturl}/#/?apiUrl={$apiurl}&wsUrl={$wsurl}&partnerCode={$partnercode}&token={$ticket}&locale={$language}&gameId={$game_code}";
+			$gameTokenUrl   =   "{$clienturl}/#/?apiUrl={$apiurl}&wsUrl={$wsurl}&partnerCode={$partnercode}&token={$ticket}&timezone=0&locale={$language}&gameId={$game_code}";
 	  
 		   }
 
