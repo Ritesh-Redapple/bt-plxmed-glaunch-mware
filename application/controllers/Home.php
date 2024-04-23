@@ -282,7 +282,7 @@ class Home extends MY_Controller
 
 		   } else{
 	  
-			$gameTokenUrl   =   "{$clienturl}/#/?apiUrl={$apiurl}&wsUrl={$wsurl}&partnerCode={$partnercode}&token={$ticket}&locale={$language}&gameId={$game_code}";
+			$gameTokenUrl   =   "{$clienturl}/#/?apiUrl={$apiurl}&wsUrl={$wsurl}&partnerCode={$partnercode}&token={$ticket}&timezone=0&locale={$language}&gameId={$game_code}";
 	  
 		   }
 
