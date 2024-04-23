@@ -228,7 +228,7 @@ class Home extends MY_Controller
 		$providerdetail = $this->Home_model->getproviderdetails($provider_id);
 		$parentprovider = !empty($providerdetail['parent_id'])?$providerdetail['parent_id']:$provider_id;
 
-		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$ticket,$provider_id,$client_id);
+		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$ticket,$parentprovider,$client_id);
 		if(empty($chkuser_details))
 		{
 			$resultarr = json_encode([
