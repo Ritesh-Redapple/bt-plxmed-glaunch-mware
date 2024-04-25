@@ -37,13 +37,13 @@ class Home extends MY_Controller
 	public function pnglaunch()
 	{
 		$data = array();
-		$params = $this->input->get();
 		//echo '<pre>';print_r($params);
 		$provider_id = 17;
 		$gid  = $this->input->get('gid', TRUE);
         $ticket  = $this->input->get('ticket', TRUE);
         $brand = $this->input->get('brand', TRUE);
         $client_id = explode('-',$brand)[1];
+		$returnUrl = $this->input->get('returnUrl', TRUE);
 
 
 		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$ticket,$provider_id,$client_id);
@@ -83,6 +83,9 @@ class Home extends MY_Controller
 			//$data['stagecheck'] = $this->staging_check;
 		}
 		//echo '<pre>'; print_r($pparam); die;
+
+		$params = $this->input->get();
+		unset($params['returnUrl']);
 		$query=""; $i=0;
 		foreach ($params as $key => $value) {
 			//echo $key.':'.$value;
@@ -97,7 +100,8 @@ class Home extends MY_Controller
 
 		$data['launchUrl'] = $pparam['provider_game_launch_url'].'?'.$query; 
 		//$data['query'] = $query ; 
-		
+		$data['pparam'] = $pparam;
+		$data['returnUrl'] = $returnUrl;
 		
 		$this->commonLayoutView('pnglaunch', $data, true);
 	}
