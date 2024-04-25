@@ -38,6 +38,7 @@ class Home extends MY_Controller
 	{
 		$data = array();
 		$params = $this->input->get();
+		echo '<pre>';print_r($params);
 		$provider_id = 17;
 		$gid  = $this->input->get('gid', TRUE);
         $ticket  = $this->input->get('ticket', TRUE);
@@ -81,7 +82,7 @@ class Home extends MY_Controller
 			
 			//$data['stagecheck'] = $this->staging_check;
 		}
-		//echo '<pre>'; print_r($pparam); die;
+		echo '<pre>'; print_r($pparam); die;
 		$query=""; $i=0;
 		foreach ($params as $key => $value) {
 			//echo $key.':'.$value;
