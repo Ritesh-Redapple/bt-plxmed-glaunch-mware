@@ -91,7 +91,7 @@
 
         init: function(element) {
             this.source = element.contentWindow;
-            this.origin = "https://bsistage.playngonetwork.com/"; //origin of PNG container launcher. iframe origin
+            this.origin = <?php echo $pparam['png_base_url']; ?>; //origin of PNG container launcher. iframe origin
             window.addEventListener("message", this.processGameMessage.bind(this));
         },
 
@@ -111,7 +111,7 @@
                     //You can add whatever code you want to use here.
                     break;
                 case "backToLobby":
-                    window.location.replace("https://bswb.plxmed.com/");
+                    window.location.replace("<?php echo ($returnUrl)?$returnUrl:'www.google.com'; ?>");
                     break;
 
                 default:
