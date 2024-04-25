@@ -98,7 +98,7 @@ class Home_model extends CI_Model
                     LEFT JOIN providers_module AS PM
                         ON GM.module_id = PM.id
                     WHERE GM.game_code = '{$game_code}'
-                    AND GM.parent_provider_id = '{$provider_id}'
+                    AND GM.provider_id = '{$provider_id}'
                     AND GM.status ='0'";
         $this->db2->query($query);
         $result = $this->db2->query($query);
