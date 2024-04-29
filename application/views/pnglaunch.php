@@ -91,7 +91,7 @@
 
         init: function(element) {
             this.source = element.contentWindow;
-            this.origin = <?php echo $pparam['png_base_url']; ?>; //origin of PNG container launcher. iframe origin
+            this.origin = "<?php echo $pparam['png_base_url']; ?>"; //origin of PNG container launcher. iframe origin
             window.addEventListener("message", this.processGameMessage.bind(this));
         },
 
