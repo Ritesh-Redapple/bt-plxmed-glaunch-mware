@@ -276,7 +276,7 @@ class Home extends MY_Controller
 		$partnercode = $pparam['partnerCode'];
 		$apiurl = $pparam['apiurl'];
 		$wsurl = $pparam['wsurl'];
-		if($gamedetail["provider_id"] == 92){
+		if($gamedetail["provider_id"] == 65){
 
 			if($game_code == 'lobby'){
 	  
