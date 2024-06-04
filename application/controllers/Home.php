@@ -108,6 +108,7 @@ class Home extends MY_Controller
 
 	public function pgsoftlaunch()
 	{
+		echo 'hello'; die;
 		$data = array();
 		$params = $this->input->get();
 
@@ -121,7 +122,7 @@ class Home extends MY_Controller
 
 
 		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$player_token,$provider_id,$client_id);
-		echo '<pre>';print_r($chkuser_details); die;
+		//echo '<pre>';print_r($chkuser_details); die;
 		if(empty($chkuser_details))
 		{
 			$resultarr = json_encode([
