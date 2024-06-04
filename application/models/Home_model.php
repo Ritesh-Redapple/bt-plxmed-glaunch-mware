@@ -75,7 +75,7 @@ class Home_model extends CI_Model
     public function getUserDtlsByToken($field_key, $token, $provider_id,$client_id) 
     {
        
-       echo $query= "SELECT usr.id, usr.reference_id, usr.username, usr.usercode, usr.first_name, usr.last_name, usr.mobile_no, usr.last_login, usr.available_balance, CT.currency_code AS currency, usr.status, usr.created_ts, cum.client_id, usr.last_played_provider, usr.account_type
+        $query= "SELECT usr.id, usr.reference_id, usr.username, usr.usercode, usr.first_name, usr.last_name, usr.mobile_no, usr.last_login, usr.available_balance, CT.currency_code AS currency, usr.status, usr.created_ts, cum.client_id, usr.last_played_provider, usr.account_type
                 FROM client_users_provider_details_".$client_id." dtls 
                 INNER JOIN client_users_".$client_id." usr
                     ON dtls.client_user_id = usr.id
