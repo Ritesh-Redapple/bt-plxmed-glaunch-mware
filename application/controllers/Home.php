@@ -108,7 +108,6 @@ class Home extends MY_Controller
 
 	public function pgsoftlaunch()
 	{
-		echo 'hello'; die;
 		$data = array();
 		$params = $this->input->get();
 
