@@ -121,8 +121,10 @@ class Home extends MY_Controller
 
 
 		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$player_token,$provider_id,$client_id);
+
 		echo '<pre> ========';print_r($chkuser_details); die;
  		if(empty($chkuser_details))
+
 		{
 			$resultarr = json_encode([
 				"status" => "error",
