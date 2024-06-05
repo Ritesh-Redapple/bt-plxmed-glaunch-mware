@@ -219,6 +219,9 @@ class Home extends MY_Controller
 
 	private function getIP()
 	{
+		echo '<pre> ===========Remote addr';print_r($_SERVER['REMOTE_ADDR']);
+		echo '<pre> ===========HTTP_X_FORWARDED_FOR';print_r($_SERVER['HTTP_X_FORWARDED_FOR']);
+		echo '<pre> ===========HTTP_CLIENT_IP';print_r($_SERVER['HTTP_CLIENT_IP']);
 		$ip = $_SERVER['REMOTE_ADDR'] ?: ($_SERVER['HTTP_X_FORWARDED_FOR'] ?: $_SERVER['HTTP_CLIENT_IP']);
 		return $ip;
 	}
