@@ -118,7 +118,8 @@ class Home extends MY_Controller
 		$gid  = $this->input->get('game', TRUE);
 		$client_id = $this->input->get('client_id', TRUE);
 		$language = !empty($this->input->get('lang', TRUE))?$this->input->get('lang', TRUE):'en';
-		$ip = str_replace('::ffff:','',$this->input->get('ip', TRUE));
+		//$ip = str_replace('::ffff:','',$this->input->get('ip', TRUE));
+		$ip = '16.162.148.201';
 		echo '<pre>';print_r($ip);
 		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$player_token,$provider_id,$client_id);
 
