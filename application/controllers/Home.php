@@ -119,8 +119,8 @@ class Home extends MY_Controller
 		$client_id = $this->input->get('client_id', TRUE);
 		$language = !empty($this->input->get('lang', TRUE))?$this->input->get('lang', TRUE):'en';
 		//$ip = str_replace('::ffff:','',$this->input->get('ip', TRUE));
-		$ip = '16.162.148.201';
-		echo '<pre>';print_r($ip);
+		$ip = '16.162.245.48';
+		//echo '<pre>';print_r($ip);
 		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$player_token,$provider_id,$client_id);
 
  		if(empty($chkuser_details))
