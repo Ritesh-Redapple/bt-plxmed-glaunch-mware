@@ -177,7 +177,7 @@ class Home extends MY_Controller
 	 
       $headers = ['Content-Type: application/x-www-form-urlencoded'];
 
-	  //echo  $url; die;
+	  echo  $url;
   
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -188,7 +188,7 @@ class Home extends MY_Controller
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       $response = curl_exec($ch);
 
-	  //echo '<pre> ===========';print_r($response); die;
+	  echo '<pre> ===========';print_r($response); die;
 
 	  $result = array(); 
 	  if($response === false)
