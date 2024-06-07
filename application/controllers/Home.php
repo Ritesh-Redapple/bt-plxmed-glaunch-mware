@@ -120,9 +120,9 @@ class Home extends MY_Controller
 		$language = !empty($this->input->get('lang', TRUE))?$this->input->get('lang', TRUE):'en';
 		//$ip = str_replace('::ffff:','',$this->input->get('ip', TRUE));
 		//echo '<pre>';print_r($ip);
-		$ip = '16.162.245.48';
+		//$ip = '16.162.245.48';
 		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$player_token,$provider_id,$client_id);
-		echo '<pre>';print_r($chkuser_details);
+		//echo '<pre>';print_r($chkuser_details);
  		if(empty($chkuser_details))
 
 		{
@@ -171,7 +171,7 @@ class Home extends MY_Controller
       $game_code = $gamedetail['game_code'];
     
       $trace_id = $this->get_uuid(openssl_random_pseudo_bytes(32));
-      $body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip='.$ip; //1408d57ed2abdaef7994c926ff558413
+      $body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip='.$this->getIP(); //1408d57ed2abdaef7994c926ff558413
        echo $body_params_encoded; 
 	   echo '============';
     	 $url = $new_game_launch_url."?trace_id=".$trace_id;
