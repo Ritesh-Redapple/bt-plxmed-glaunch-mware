@@ -164,26 +164,17 @@ class Home extends MY_Controller
 			$lobby_url = $pparam['lobby_url'];
 		}
 
-		//echo '<pr>';print_r($pparam); die;
-		
-
-	  $user_code =  explode('-',$player_token)[1];;
-      $game_code = $gamedetail['game_code'];
+	$user_code =  explode('-',$player_token)[1];
+    $game_code = $gamedetail['game_code'];
     
-      $trace_id = $this->get_uuid(openssl_random_pseudo_bytes(32));
-      $body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip='.$this->getIP(); 
-	  
-	  //$body_params_encoded = 'operator_token='.$operator_token.'&path=/'.urlencode($game_code).'/index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip='.$this->getIP();
-	  
-       echo $body_params_encoded; 
-	   echo '============';
-    	 $url = $new_game_launch_url."?trace_id=".$trace_id;
-	 
-      $headers = ['Content-Type: application/x-www-form-urlencoded'];
+    $trace_id = $this->get_uuid(openssl_random_pseudo_bytes(32));
+	$body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip='.$this->getIP(); //1408d57ed2abdaef7994c926ff558413
+	//echo $body_params_encoded; //die();
 
-	  echo  $url;
-  
-      $ch = curl_init();
+	$url = $new_game_launch_url."?trace_id=".$trace_id;
+	$headers = ['Content-Type: application/x-www-form-urlencoded'];
+
+	  $ch = curl_init();
       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
       curl_setopt($ch, CURLOPT_URL, $url);
       curl_setopt($ch, CURLOPT_POST, true);
@@ -192,9 +183,7 @@ class Home extends MY_Controller
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       $response = curl_exec($ch);
 
-	  echo '<pre> ===========';print_r($response); die;
-
-	  $result = array(); 
+	 $result = array(); 
 	  if($response === false)
       {
         $result['success']= false;
