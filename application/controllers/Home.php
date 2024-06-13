@@ -242,6 +242,7 @@ class Home extends MY_Controller
 		$parentprovider = !empty($providerdetail['parent_id'])?$providerdetail['parent_id']:$provider_id;
 
 		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$ticket,$provider_id,$client_id);
+
 		if(empty($chkuser_details))
 		{
 			$resultarr = json_encode([
@@ -309,6 +310,99 @@ class Home extends MY_Controller
 		
 		
 		$this->commonLayoutView('betgameslaunch', $data, true);
+	}
+
+	public function funstarlaunch()
+	{
+		$data = array();
+		$params = $this->input->get();
+		//echo '<pre>';print_r($params);
+		$provider_id = $this->input->get('pid', TRUE);
+		$game_code  = $this->input->get('gid', TRUE);
+        $ticket  = $this->input->get('ticket', TRUE);
+        $client_id = $this->input->get('cid', TRUE);
+		$language = $this->input->get('language', TRUE);
+		$currency = $this->input->get('currency', TRUE);
+		$device = $this->input->get('device', TRUE);
+
+		$providerdetail = $this->Home_model->getproviderdetails($provider_id);
+		
+		$parentprovider = !empty($providerdetail['parent_id'])?$providerdetail['parent_id']:$provider_id;
+		
+		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$ticket,$provider_id,$client_id);
+		//echo '<pre>';print_r($chkuser_details);
+		if(empty($chkuser_details))
+		{
+			$resultarr = json_encode([
+				"status" => "error",
+				"error"=> [
+				  "scope"=> "user",
+				  "no_refund"=>"1",
+				  "message"=> "Token mismatched!"
+				]
+			]);
+			echo $resultarr; die;
+		}
+
+		$gamedetail = $this->Home_model->getGameDetailsbyCode($game_code, $provider_id);
+		//echo '<pre>';print_r($gamedetail);
+		if(empty($gamedetail))
+		{
+			$resultarr = json_encode([
+				"status" => "error",
+				"code"=> "1007",
+				"message"=>"Game not found!"
+			]);
+
+			echo $resultarr; die;
+		}
+
+		$provider_params = $this->Home_model->get_provider_params($client_id, $provider_id);
+		$pparam = array();
+		if (!empty($provider_params)) 
+		{
+			foreach ($provider_params as $provider_params) 
+			{
+				$pparam[$provider_params['field_key']] = $provider_params['field_value'];
+			}
+			
+			//$data['stagecheck'] = $this->staging_check;
+		}
+		//print_r($pparam);
+		//$clienturl = $pparam['clienturl'];
+		//$partnercode = $pparam['partnerCode'];
+		$apiurl = $pparam['api_url'];
+		$oid = $pparam['operator_id'];
+		$gameTokenUrl = "{$apiurl}gamelauncher/play/tk?gameId={$game_code}&device={$device}&";
+		$headers = ['Content-Type: application/x-www-form-urlencoded'];
+		$body_params_encoded = "currencyIso={$currency}&operatorId={$oid}&playMode=real&regulator=UK&playerSessionId={$ticket}";
+		//echo '<pre> ===========';print_r($gameTokenUrl);
+		//echo '<pre> ===========';print_r($body_params_encoded);
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_URL, $gameTokenUrl);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $body_params_encoded);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($ch);
+		//echo '<pre> ===========';print_r($response); die;
+		$result = array(); 
+		if($response === false)
+		{
+		  $result['success']= false;
+		  $result['response'] = curl_error($ch);
+		}else
+		{   
+		  $result['success']= true;
+		  $result['response'] = $response;
+		}
+  
+		curl_close($ch);
+		
+		$data['response'] = $result;		
+		
+		$this->commonLayoutView('funstarlaunch', $data, true);
 	}
 	/* public function index()
 	{

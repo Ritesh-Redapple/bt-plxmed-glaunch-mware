@@ -57,3 +57,4 @@ $route['translate_uri_dashes'] = FALSE;
 $route['png/gamelaunch']                      = 'home/pnglaunch';
 $route['pgsoft/gamelaunch']                      = 'home/pgsoftlaunch';
 $route['betgames/gamelaunch']                   = 'home/betgameslaunch';
+$route['funstar/gamelaunch']                    = 'home/funstarlaunch';

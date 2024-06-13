@@ -87,7 +87,10 @@ class Home_model extends CI_Model
                     AND dtls.field_value ='{$token}'
                     AND dtls.provider_id ='{$provider_id}'
                 ORDER BY dtls.id DESC";
+                
+                $this->db2->query($query);
            $result = $this->db2->query($query);
+           //echo '<pre>';print_r($result->row_array());
         return $result->row_array();
     }
 
