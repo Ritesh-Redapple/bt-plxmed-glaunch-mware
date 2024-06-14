@@ -324,7 +324,7 @@ class Home extends MY_Controller
 		$language = $this->input->get('language', TRUE);
 		$currency = $this->input->get('currency', TRUE);
 		$device = $this->input->get('device', TRUE);
-
+		$playerSessionToken = $this->input->get('playerSessionToken', TRUE);
 		$providerdetail = $this->Home_model->getproviderdetails($provider_id);
 		
 		$parentprovider = !empty($providerdetail['parent_id'])?$providerdetail['parent_id']:$provider_id;
@@ -373,20 +373,25 @@ class Home extends MY_Controller
 		//$partnercode = $pparam['partnerCode'];
 		$apiurl = $pparam['api_url'];
 		$oid = $pparam['operator_id'];
-		$gameTokenUrl = "{$apiurl}gamelauncher/play/tk?gameId={$game_code}&device={$device}&";
+		$query_string = "gameId={$game_code}&device={$device}&";
+		//$encoded_query_string = urlencode($query_string);
+		$gameTokenUrl = "{$apiurl}gamelauncher/play/generic?{$query_string}";
 		$headers = ['Content-Type: application/x-www-form-urlencoded'];
-		$body_params_encoded = "currencyIso={$currency}&operatorId={$oid}&playMode=real&regulator=UK&playerSessionId={$ticket}";
+		
+		$body_params = "regulator=UK&currencyIso={$currency}&operatorId={$oid}&playMode=real&playerSessionId={$playerSessionToken}";
+		//$encoded_body_params = urlencode($body_params);
+		//echo '<pre> ===========';print_r($encoded_body_params);
 		//echo '<pre> ===========';print_r($gameTokenUrl);
-		//echo '<pre> ===========';print_r($body_params_encoded);
+		//echo '<pre> ===========';print_r($body_params_encoded); die;
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_URL, $gameTokenUrl);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $body_params_encoded);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $body_params);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$response = curl_exec($ch);
-		//echo '<pre> ===========';print_r($response); die;
+		echo '<pre> ===========';print_r($response);
 		$result = array(); 
 		if($response === false)
 		{
