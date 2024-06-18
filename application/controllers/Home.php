@@ -183,6 +183,7 @@ class Home extends MY_Controller
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       $response = curl_exec($ch);
 		echo $url;
+		echo $body_params_encoded;
 		echo '<pre>'; print_r($headers);
 		echo '<pre>'; print_r($response);
 		die;
