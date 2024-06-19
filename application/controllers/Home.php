@@ -183,12 +183,12 @@ class Home extends MY_Controller
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       $response = curl_exec($ch);
 		
-		echo '<pre>'; print_r($provider_params).'<br>';
-		echo $url.'<br>';
-		echo $body_params_encoded.'<br>';
-		echo '<pre>'; print_r($headers);
-		echo '<pre>'; print_r($response);
-		die;
+		//echo '<pre>'; print_r($provider_params).'<br>';
+		// echo $url.'<br>';
+		// echo $body_params_encoded.'<br>';
+		// echo '<pre>'; print_r($headers);
+		// echo '<pre>'; print_r($response);
+		// die;
 	 $result = array(); 
 	  if($response === false)
       {
