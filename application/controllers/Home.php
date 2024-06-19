@@ -168,7 +168,7 @@ class Home extends MY_Controller
     $game_code = $gamedetail['game_code'];
     
     $trace_id = $this->get_uuid(openssl_random_pseudo_bytes(32));
-	$body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip='.$this->getIP(); //1408d57ed2abdaef7994c926ff558413
+	$body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip=16.162.148.201'; //.$this->getIP() //1408d57ed2abdaef7994c926ff558413
 	//echo $body_params_encoded; //die();
 
 	$url = $new_game_launch_url."?trace_id=".$trace_id;
@@ -182,11 +182,13 @@ class Home extends MY_Controller
       curl_setopt($ch, CURLOPT_POSTFIELDS, $body_params_encoded);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       $response = curl_exec($ch);
-		// echo $url;
-		// echo $body_params_encoded;
-		// echo '<pre>'; print_r($headers);
-		// echo '<pre>'; print_r($response);
-		// die;
+		
+		echo '<pre>'; print_r($provider_params).'<br>';
+		echo $url.'<br>';
+		echo $body_params_encoded.'<br>';
+		echo '<pre>'; print_r($headers);
+		echo '<pre>'; print_r($response);
+		die;
 	 $result = array(); 
 	  if($response === false)
       {
