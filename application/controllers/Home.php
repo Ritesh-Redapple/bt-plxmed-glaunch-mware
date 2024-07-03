@@ -27,6 +27,24 @@ class Home extends MY_Controller
 		$this->load->model("Home_model");
 		$this->load->library('session');
 
+		/** custom logger work start */
+		$cotrollername = $this->router->fetch_class();
+		$methodname = $this->router->fetch_method();
+		$querystring = $this->input->server('QUERY_STRING');
+		$getIp = $_SERVER['REMOTE_ADDR'];
+
+		$filename = 'model_'.$methodname.'.txt';
+		$filepath = 'assets/customlog/';
+		$foldername = date('Y-m-d');
+		$filecontent = json_encode(array('date'=>date('Y-m-d H:i:s'),'IP'=>$getIp,'controller'=>$cotrollername,'method'=>$methodname,'querystring'=> $querystring));
+		if (!is_dir($filepath.$foldername)) 
+		{
+			mkdir($filepath . $foldername, 0777, TRUE);
+		}
+		$filecontent .= (file_exists($filepath.$foldername.'/'.$filename))?PHP_EOL.file_get_contents($filepath. $foldername.'/'.$filename):PHP_EOL.'';
+		file_put_contents($filepath. $foldername.'/'.$filename,$filecontent);
+		/** custom logger work end */
+
 	}
 
 	function index(){
@@ -164,27 +182,17 @@ class Home extends MY_Controller
 			$lobby_url = $pparam['lobby_url'];
 		}
 
-		//echo '<pr>';print_r($pparam); die;
-		
-
-	  $user_code =  explode('-',$player_token)[1];;
-      $game_code = $gamedetail['game_code'];
+	$user_code =  explode('-',$player_token)[1];
+    $game_code = $gamedetail['game_code'];
     
-      $trace_id = $this->get_uuid(openssl_random_pseudo_bytes(32));
-      $body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip='.$this->getIP(); 
-	  //$body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt='.urlencode('1&ops='.$player_token).'&url_type=game-entry&client_ip='.$this->getIP();  
-	  //1408d57ed2abdaef7994c926ff558413
-	  //$body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt=1&ops='.$player_token.'&url_type=game-entry&client_ip=16.162.245.48';  
-	  
-       echo $body_params_encoded; 
-	   echo '============';
-    	 $url = $new_game_launch_url."?trace_id=".$trace_id;
-	 
-      $headers = ['Content-Type: application/x-www-form-urlencoded'];
+    $trace_id = $this->get_uuid(openssl_random_pseudo_bytes(32));
+	$body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip=16.162.148.201'; //.$this->getIP() //1408d57ed2abdaef7994c926ff558413
+	//echo $body_params_encoded; //die();
 
-	  echo  $url;
-  
-      $ch = curl_init();
+	$url = $new_game_launch_url."?trace_id=".$trace_id;
+	$headers = ['Content-Type: application/x-www-form-urlencoded'];
+
+	  $ch = curl_init();
       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
       curl_setopt($ch, CURLOPT_URL, $url);
       curl_setopt($ch, CURLOPT_POST, true);
@@ -192,10 +200,14 @@ class Home extends MY_Controller
       curl_setopt($ch, CURLOPT_POSTFIELDS, $body_params_encoded);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       $response = curl_exec($ch);
-
-	  echo '<pre> ===========';print_r($response); die;
-
-	  $result = array(); 
+		
+		//echo '<pre>'; print_r($provider_params).'<br>';
+		// echo $url.'<br>';
+		// echo $body_params_encoded.'<br>';
+		// echo '<pre>'; print_r($headers);
+		// echo '<pre>'; print_r($response);
+		// die;
+	 $result = array(); 
 	  if($response === false)
       {
         $result['success']= false;

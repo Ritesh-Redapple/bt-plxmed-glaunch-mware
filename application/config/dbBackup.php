@@ -119,4 +119,3 @@ if($_SERVER["HTTP_HOST"] == "localhost"){
 	);
 	
 }
-
