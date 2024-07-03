@@ -27,6 +27,24 @@ class Home extends MY_Controller
 		$this->load->model("Home_model");
 		$this->load->library('session');
 
+		/** custom logger work start */
+		$cotrollername = $this->router->fetch_class();
+		$methodname = $this->router->fetch_method();
+		$querystring = $this->input->server('QUERY_STRING');
+		$getIp = $_SERVER['REMOTE_ADDR'];
+
+		$filename = 'model_'.$methodname.'.txt';
+		$filepath = 'assets/customlog/';
+		$foldername = date('Y-m-d');
+		$filecontent = json_encode(array('date'=>date('Y-m-d H:i:s'),'IP'=>$getIp,'controller'=>$cotrollername,'method'=>$methodname,'querystring'=> $querystring));
+		if (!is_dir($filepath.$foldername)) 
+		{
+			mkdir($filepath . $foldername, 0777, TRUE);
+		}
+		$filecontent .= (file_exists($filepath.$foldername.'/'.$filename))?PHP_EOL.file_get_contents($filepath. $foldername.'/'.$filename):PHP_EOL.'';
+		file_put_contents($filepath. $foldername.'/'.$filename,$filecontent);
+		/** custom logger work end */
+
 	}
 
 	function index(){
