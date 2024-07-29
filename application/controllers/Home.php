@@ -272,7 +272,7 @@ class Home extends MY_Controller
 			echo $resultarr; die;
 		}
 
-		$gamedetail = $this->Home_model->getGameDetailsbyCode($game_code, $provider_id);
+		$gamedetail = $this->Home_model->getGameDetailsbyCode($game_code, $parentprovider);
 
 		if(empty($gamedetail))
 		{
