@@ -68,11 +68,11 @@ class Home extends MY_Controller
 		if(empty($chkuser_details))
 		{
 			$resultarr = json_encode([
-				"status" => "error",
-				"error"=> [
-				  "scope"=> "user",
-				  "no_refund"=>"1",
-				  "message"=> "Token mismatched!"
+				"status" => "1",
+				"code" => "1005",
+				"message" => "User not found.",
+				"data"=> [
+				  "return_url" => "",
 				]
 			]);
 			echo $resultarr; die;
@@ -82,9 +82,12 @@ class Home extends MY_Controller
 		if(empty($gamedetail))
 		{
 			$resultarr = json_encode([
-				"status" => "error",
-				"code"=> "1007",
-				"message"=>"Game not found!"
+				"status" => "1",
+				"code" => "4009",
+				"message" => "Game not found.",
+				"data"=> [
+				  "return_url" => "",
+				]
 			]);
 
 			echo $resultarr; die;
@@ -145,11 +148,11 @@ class Home extends MY_Controller
 
 		{
 			$resultarr = json_encode([
-				"status" => "error",
-				"error"=> [
-				  "scope"=> "user",
-				  "no_refund"=>"1",
-				  "message"=> "Token mismatched!"
+				"status" => "1",
+				"code" => "1005",
+				"message" => "User not found.",
+				"data"=> [
+				  "return_url" => "",
 				]
 			]);
 			echo $resultarr; die;
@@ -160,9 +163,12 @@ class Home extends MY_Controller
 		if(empty($gamedetail))
 		{
 			$resultarr = json_encode([
-				"status" => "error",
-				"code"=> "1007",
-				"message"=>"Game not found!"
+				"status" => "1",
+				"code" => "4009",
+				"message" => "Game not found.",
+				"data"=> [
+				  "return_url" => "",
+				]
 			]);
 			echo $resultarr; die;
 			//return $resultarr;
@@ -182,24 +188,24 @@ class Home extends MY_Controller
 			$lobby_url = $pparam['lobby_url'];
 		}
 
-	$user_code =  explode('-',$player_token)[1];
-    $game_code = $gamedetail['game_code'];
+		$user_code =  explode('-',$player_token)[1];
+    	$game_code = $gamedetail['game_code'];
     
-    $trace_id = $this->get_uuid(openssl_random_pseudo_bytes(32));
-	$body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip=16.162.148.201'; //.$this->getIP() //1408d57ed2abdaef7994c926ff558413
-	//echo $body_params_encoded; //die();
+    	$trace_id = $this->get_uuid(openssl_random_pseudo_bytes(32));
+		$body_params_encoded = 'operator_token='.$operator_token.'&path='.urlencode('/'.$game_code.'/').'index.html&extra_args=btt'.urlencode('=1&ops=').$player_token.'&url_type=game-entry&client_ip=16.162.148.201'; //.$this->getIP() //1408d57ed2abdaef7994c926ff558413
+		//echo $body_params_encoded; //die();
 
-	$url = $new_game_launch_url."?trace_id=".$trace_id;
-	$headers = ['Content-Type: application/x-www-form-urlencoded'];
+		$url = $new_game_launch_url."?trace_id=".$trace_id;
+		$headers = ['Content-Type: application/x-www-form-urlencoded'];
 
-	  $ch = curl_init();
-      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-      curl_setopt($ch, CURLOPT_URL, $url);
-      curl_setopt($ch, CURLOPT_POST, true);
-      curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $body_params_encoded);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-      $response = curl_exec($ch);
+	  	$ch = curl_init();
+      	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+      	curl_setopt($ch, CURLOPT_URL, $url);
+      	curl_setopt($ch, CURLOPT_POST, true);
+      	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+      	curl_setopt($ch, CURLOPT_POSTFIELDS, $body_params_encoded);
+      	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      	$response = curl_exec($ch);
 		
 		//echo '<pre>'; print_r($provider_params).'<br>';
 		// echo $url.'<br>';
@@ -207,22 +213,20 @@ class Home extends MY_Controller
 		// echo '<pre>'; print_r($headers);
 		// echo '<pre>'; print_r($response);
 		// die;
-	 $result = array(); 
-	  if($response === false)
-      {
-        $result['success']= false;
-		$result['response'] = curl_error($ch);
-      }else
-      {   
-		$result['success']= true;
-        $result['response'] = $response;
-      }
+	 	$result = array(); 
+	  	if($response === false){
+        	$result['success']= false;
+			$result['response'] = curl_error($ch);
+      	} else {   
+			$result['success']= true;
+        	$result['response'] = $response;
+      	}
 
-      curl_close($ch);
+      	curl_close($ch);
       
-	  $data['response'] = $result;
+	  	$data['response'] = $result;
 		
-	  $this->commonLayoutView('pgsoftlaunch', $data, true);
+	  	$this->commonLayoutView('pgsoftlaunch', $data, true);
 	}
 
 	private function get_uuid($data)
@@ -254,27 +258,31 @@ class Home extends MY_Controller
 		$parentprovider = !empty($providerdetail['parent_id'])?$providerdetail['parent_id']:$provider_id;
 
 		$chkuser_details = $this->Home_model->getUserDtlsByToken('PlayerToken',$ticket,$provider_id,$client_id);
+
 		if(empty($chkuser_details))
 		{
 			$resultarr = json_encode([
-				"status" => "error",
-				"error"=> [
-				  "scope"=> "user",
-				  "no_refund"=>"1",
-				  "message"=> "Token mismatched!"
+				"status" => "1",
+				"code" => "1005",
+				"message" => "User not found.",
+				"data"=> [
+				  "return_url" => "",
 				]
 			]);
 			echo $resultarr; die;
 		}
 
-		$gamedetail = $this->Home_model->getGameDetailsbyCode($game_code, $provider_id);
+		$gamedetail = $this->Home_model->getGameDetailsbyCode($game_code, $parentprovider);
 
 		if(empty($gamedetail))
 		{
 			$resultarr = json_encode([
-				"status" => "error",
-				"code"=> "1007",
-				"message"=>"Game not found!"
+				"status" => "1",
+				"code" => "4009",
+				"message" => "Game not found.",
+				"data"=> [
+				  "return_url"=> "",
+				]
 			]);
 
 			echo $resultarr; die;
@@ -322,6 +330,7 @@ class Home extends MY_Controller
 		
 		$this->commonLayoutView('betgameslaunch', $data, true);
 	}
+
 	/* public function index()
 	{
 		if ($this->session->userdata('session_data')) {
